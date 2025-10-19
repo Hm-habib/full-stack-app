@@ -1,0 +1,37 @@
+.noteDetails {
+    display: none;
+    text-align: left;
+
+    word-wrap: break-word;
+    /* older name, still supported */
+    overflow-wrap: break-word;
+}
+
+.expanded {
+    display: block;
+}
+
+button {
+    min-width: 50px;
+}
+
+/* table {
+    max-width: 600px;
+    min-width: 600px;
+} */
+
+.strike {
+    text-decoration: line-through;
+}
+
+
+.tableWidthAll {
+
+    width: 600px;
+}
+
+.buttonTd {
+    /* background-color: green; */
+    width: 250px;
+    text-align: end;
+}
