@@ -28,7 +28,7 @@ function UserLoginComponent() {
         <h2 className="text-black mb-8 font-bold text-3xl text-center">
           Login
         </h2>
-        <div>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               className="block text-gray-800 text-sm font-medium mb-2"
@@ -40,9 +40,9 @@ function UserLoginComponent() {
               id="username"
               type="text"
               value={username}
+              required
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter username"
-              required
               className="w-full text-gray-800 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
@@ -65,12 +65,12 @@ function UserLoginComponent() {
           </div>
           <button
             type="submit"
-            onClick={handleSubmit}
+           
             className="w-full bg-blue-500 text-white py-2 rounded-md mt-5 hover:bg-blue-600 transition"
           >
             Login
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
