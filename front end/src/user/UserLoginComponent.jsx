@@ -1,9 +1,12 @@
 import { React, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function UserLoginComponent() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showError, setShowError] = useState(undefined);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,25 +16,34 @@ function UserLoginComponent() {
         {
           username,
           password,
-        }
-        // { withCredentials: true }
+        },
+        { withCredentials: true }
       );
-      console.log("✅ Login successful:", response.data);
+      console.log(`response: ${response.status} log in successful `);
+      if (response.status == 200) {
+        return navigate("/dashboard");
+      }
     } catch (err) {
-      console.error("Login error:", err.response?.data || err.message);
+      // console.log("✅ Login successful:", response.status);
+      if (err.response && err.response.data.error) {
+        setShowError(err.response.data.error);
+      } else {
+        console.error("server error:", err.message);
+        setShowError(err.message);
+      }
     }
   };
 
   return (
-    <div className="flex items-center justify-center  bg-gray-100">
-      <div className="bg-white shadow-md rounded-lg p-6 w-96">
+    <div className="flex items-center justify-center rounded  bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg p-6 w-96 ">
         <h2 className="text-black mb-8 font-bold text-3xl text-center">
           Login
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              className="block text-gray-800 text-sm font-medium mb-2"
+              className="block text-gray-800 text-md font-medium mb-2"
               htmlFor="username"
             >
               Username
@@ -48,7 +60,7 @@ function UserLoginComponent() {
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-medium mb-2"
+              className="block text-gray-700 text-md font-medium mb-2"
               htmlFor="password"
             >
               Password
@@ -63,13 +75,19 @@ function UserLoginComponent() {
               className="w-full text-gray-800 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>
+
           <button
             type="submit"
-           
             className="w-full bg-blue-500 text-white py-2 rounded-md mt-5 hover:bg-blue-600 transition"
           >
             Login
           </button>
+
+          {showError && (
+            <div className="text-red-900 mt-2 ">
+              <h3>{showError} </h3>
+            </div>
+          )}
         </form>
       </div>
     </div>
