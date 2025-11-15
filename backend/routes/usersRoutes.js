@@ -35,7 +35,8 @@ router.post("/user-logout", async (req, res) => {
   });
 });
 
-router.post("/is-Authenticated", isAuthenticated, (req, res) => {
+router.get("/userIsAuthenticated", isAuthenticated, (req, res) => {
   res.status(200).send({ message: "user is authenticated" });
 });
+
 module.exports = router;

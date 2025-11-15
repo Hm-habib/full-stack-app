@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import isAuthenticated from "../utils/authValidator";
 
-
 function UserDashboard() {
   const [showError, setShowError] = useState(null);
   const [user, setUser] = useState({
@@ -15,12 +14,13 @@ function UserDashboard() {
   });
 
   const navigate = useNavigate();
+
+
+
   useEffect(() => {
     let userDetails = async () => {
-      const isLoggedIn = await isAuthenticated()
-      // console.log(isLoggedIn)
+       const isLoggedIn = await isAuthenticated()
       if(!isLoggedIn) navigate('/');
-
       try {
         const response = await userData();
         setUser((prev) => ({
@@ -51,7 +51,6 @@ function UserDashboard() {
 
       return response;
     } catch (err) {
-  
       if (err.response && err.response.data.error) {
         setShowError(err.response.data.error);
       } else {

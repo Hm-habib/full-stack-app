@@ -1,12 +1,21 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import isAuthenticated from "../utils/authValidator";
 
 function UserLoginComponent() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showError, setShowError] = useState(undefined);
+
+useEffect(() => {
+  let logInStatus = async () => {
+     const userIsLoggedIn = await isAuthenticated();
+      if(userIsLoggedIn) navigate("/dashboard");
+  }
+  logInStatus()
+}, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
