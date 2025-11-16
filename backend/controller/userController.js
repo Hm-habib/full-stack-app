@@ -5,14 +5,15 @@ const blogModel = require("../model/blogModel");
 // logIn btn to mainInterface, mainInterface = views/index
 const loggedInUser = async (req, res) => {
   const { username, password } = req.body;
+  let errorMsg = {error:"username or password is incorrect"};
 
   // match username, user input and database
   const user = await userModel.findOne({ username: username });
-  if (!user) return res.send("username or password is incorrect");
+  if (!user) return res.status(401).send(errorMsg)
 
   // match password, user input and database
   let isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.send("username or password is incorrect");
+  if (!isMatch) return res.status(401).send(errorMsg)
 
   req.session.user = user;
 
