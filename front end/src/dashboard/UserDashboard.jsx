@@ -15,12 +15,10 @@ function UserDashboard() {
 
   const navigate = useNavigate();
 
-
-
   useEffect(() => {
     let userDetails = async () => {
-       const isLoggedIn = await isAuthenticated()
-      if(!isLoggedIn) navigate('/');
+      const isLoggedIn = await isAuthenticated();
+      if (!isLoggedIn) navigate("/");
       try {
         const response = await userData();
         setUser((prev) => ({

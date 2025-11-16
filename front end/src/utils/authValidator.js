@@ -7,7 +7,7 @@ export default async function isAuthenticated() {
     });
     return response.status == 200;
   } catch (error) {
-    console.log(`you are not authenticated: ${error}`);
+    console.log(error.response.data)
     return false;
   }
 }

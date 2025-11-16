@@ -36,7 +36,9 @@ router.post("/user-logout", async (req, res) => {
 });
 
 router.get("/userIsAuthenticated", isAuthenticated, (req, res) => {
-  res.status(200).send({ message: "user is authenticated" });
+ if (res.status== 200) {
+  return res.send({ message: "user is authenticated" });
+ } else return res.send({ message: "user isn't authenticated" });
 });
 
 module.exports = router;

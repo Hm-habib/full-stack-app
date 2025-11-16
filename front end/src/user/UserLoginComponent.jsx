@@ -12,7 +12,7 @@ function UserLoginComponent() {
 useEffect(() => {
   let logInStatus = async () => {
      const userIsLoggedIn = await isAuthenticated();
-      if(userIsLoggedIn) navigate("/dashboard");
+     if (userIsLoggedIn) navigate('/dashboard')
   }
   logInStatus()
 }, [])
