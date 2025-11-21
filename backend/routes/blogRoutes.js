@@ -1,14 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const blogController = require("../controller/blogController");
+const blogModel = require("../model/blogModel");
+
 const { isAuthenticated } = require('../middleware/authMiddleware')
 
+// Fetch user notes
+router.get("/my-notes", isAuthenticated, async (req, res) => {
+  try {
+    const notes = await blogModel.find({ userId: req.session.user._id });
+    res.json(notes);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch notes" });
+  }
+});
 
 // blog create btn to create form
 router.get("/blog/create",isAuthenticated, blogController.blogsCreate);
 
 // blog save btn to mainInterface
-router.post("/blog/save",isAuthenticated, blogController.blogsSave);
+router.post("/create-note",isAuthenticated, blogController.blogsSave);
 
 // view btn to view page
 router.get("/blog/:id/view",isAuthenticated, blogController.blogView);
