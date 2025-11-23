@@ -10,7 +10,7 @@ router.post("/user/login", userController.loggedInUser);
 router.post("/user-signup-ok", userController.signupToLogin);
 
 // mainInterface = blogs/index
-router.get("/mainInterface", userController.mainInterface);
+router.get("/user-dashboard", isAuthenticated, userController.mainInterface);
 
 // login btn to login form
 router.get("/login", (req, res) => {
@@ -21,8 +21,6 @@ router.get("/login", (req, res) => {
 router.get("/signup-user", (req, res) => {
   res.render("users/signup");
 });
-
-router.get("/user-dashboard", isAuthenticated, userController.userDashboard);
 
 // logout btn to homePage
 router.post("/user-logout", async (req, res) => {

@@ -4,8 +4,6 @@ import UserLoginComponent from './user/UserLoginComponent';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
-  
-
   return (
     <div className='flex flex-col justify-evenly gap-5'>
       <h2 className='text-2xl'>Welcome to React</h2>
@@ -15,10 +13,6 @@ function App() {
           <Route path='/dashboard' element={<UserDashboard />} ></Route>
         </Routes>
       </Router>
-
-      
-  
-
     </div>
   )
 }

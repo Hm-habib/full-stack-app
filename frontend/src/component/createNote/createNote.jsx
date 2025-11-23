@@ -18,15 +18,13 @@ function CreateNote({ onNoteCreated, onClose }) {
         { title, body },
         { withCredentials: true }
       );
-
       setTitle("");
       setBody("");
-      onNoteCreated(); // refresh notes in parent
-      onClose(); // close the create panel/modal
-      
+      onNoteCreated();
+      onClose();
     } catch (err) {
       console.error("Create note error:", err);
-      
+      alert("Failed to save note");
     }
   }
 

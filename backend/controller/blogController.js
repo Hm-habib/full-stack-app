@@ -5,20 +5,23 @@ const blogsCreate = (req, res) => {
 };
 
 const blogsSave = async (req, res) => {
-  let runningUser = req.session.user;
-  if (!runningUser) {
-    return res.redirect("/login");
+  try {
+    const { title, body } = req.body;
+    const user = req.session.user;
+
+    if (!user) return res.status(401).send("Unauthorized");
+
+    const newNote = new blogModel({
+      title,
+      body,
+      userId: user._id,
+    });
+    await newNote.save();
+    res.status(200).json(newNote);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Failed to create note");
   }
-
-  let blog = new blogModel({
-    title: req.body.title,
-    body: req.body.body,
-    done: false,
-    userId: runningUser._id,
-  });
-
-  await blog.save();
-  res.redirect("/mainInterface");
 };
 
 const blogView = async (req, res) => {
