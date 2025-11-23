@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CreateNote from "../component/createNote/createNote";
-import { useEffect } from "react";
+
 
 function UserDashboard() {
   const [notes, setNotes] = useState([]);
@@ -11,10 +11,11 @@ function UserDashboard() {
 
   const fetchNotes = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/my-notes", {
+      const res = await axios.get("http://localhost:3000/user-dashboard", {
         withCredentials: true,
       });
       setNotes(res.data);
+     
     } catch (err) {
       console.error("Failed to fetch notes:", err.message);
     }
@@ -22,6 +23,7 @@ function UserDashboard() {
   useEffect(() => {
     fetchNotes();
   }, []);
+
 
   const handleLogout = async () => {
     try {
@@ -45,7 +47,7 @@ function UserDashboard() {
           Logout
         </button>
       </div>
-
+      
       {!showCreate && (
         <div>
           {notes.map((note) => (
@@ -54,6 +56,7 @@ function UserDashboard() {
                 Title: {note.title}
               </h2>
               <p className="text-gray-600 text-start mb-4"> <span className="text-black font-bold"> Description:</span> {note.body}</p>
+              <p className="text-gray-600 text-start mb-4">Created at: {note.updatedAt}</p>
             </div>
           ))}
 

@@ -5,37 +5,29 @@ const blogModel = require("../model/blogModel");
 // logIn btn to mainInterface, mainInterface = views/index
 const loggedInUser = async (req, res) => {
   const { username, password } = req.body;
-  let errorMsg = {error:"username or password is incorrect"};
+  let errorMsg = { error: "username or password is incorrect" };
 
   // match username, user input and database
   const user = await userModel.findOne({ username: username });
-  if (!user) return res.status(401).send(errorMsg)
+  if (!user) return res.status(401).send(errorMsg);
 
   // match password, user input and database
   let isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(401).send(errorMsg)
+  if (!isMatch) return res.status(401).send(errorMsg);
 
   req.session.user = user;
 
   // res.redirect("/mainInterface");
-    res.status(200).send({message: 'user login complete'})
+  res.status(200).send({ message: "user login complete" });
 };
 
 const mainInterface = async (req, res) => {
   try {
     let runningUser = req.session.user || null; // guest = null
 
-    let blogs = [];
-    if (runningUser) {
-      blogs = await blogModel.find({ userId: runningUser._id });
-    }
-
-    let allBlogs = await blogModel.find().populate("userId", "username");
-    res.render("blogs/index", {
-      items: blogs,
-      user: runningUser || null,
-      allBlogs,
-    });
+    let notes = [];
+    notes = await blogModel.find({ userId: runningUser._id });
+    res.json(notes);
   } catch (err) {
     console.error("Error in mainInterface:", err.message);
     res.status(500).send("Something went wrong!");
@@ -75,7 +67,7 @@ const signupToLogin = async (req, res) => {
     await user.save();
 
     // return res.render("users/login");
-    res.status(201).send({message: 'user signup complete'})
+    res.status(201).send({ message: "user signup complete" });
   } catch (err) {
     if (err.code === 11000) {
     } else if (err.name === "ValidationError") {
@@ -86,21 +78,8 @@ const signupToLogin = async (req, res) => {
   }
 };
 
-const userDashboard = async (req, res) => {
-  let currentUser = req.session.user;
-  let user = {
-    id: currentUser._id,
-    username: currentUser.username,
-    phoneNumber: currentUser.phoneNumber,
-    email: currentUser.email,
-    address: currentUser.address,
-  };
-  res.status(200).send(user);
-};
-
 module.exports = {
   loggedInUser,
   mainInterface,
   signupToLogin,
-  userDashboard,
 };
