@@ -9,13 +9,13 @@ function UserLoginComponent() {
   const [password, setPassword] = useState("");
   const [showError, setShowError] = useState(undefined);
 
-useEffect(() => {
-  let logInStatus = async () => {
-     const userIsLoggedIn = await isAuthenticated();
-     if (userIsLoggedIn) navigate('/dashboard')
-  }
-  logInStatus()
-}, [])
+  useEffect(() => {
+    let logInStatus = async () => {
+      const userIsLoggedIn = await isAuthenticated();
+      if (userIsLoggedIn) navigate("/dashboard");
+    };
+    logInStatus();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -98,6 +98,14 @@ useEffect(() => {
             </div>
           )}
         </form>
+        <p className="my-2">Or</p>
+
+        <button
+          onClick={() => navigate("/signup")}
+          className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition"
+        >
+          Sign-up
+        </button>
       </div>
     </div>
   );

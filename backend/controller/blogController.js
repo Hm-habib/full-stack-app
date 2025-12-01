@@ -24,11 +24,23 @@ const blogsSave = async (req, res) => {
   }
 };
 
-const blogView = async (req, res) => {
-  let runningUser = req.session.user;
-  let blog = await blogModel.findById(req.params.id);
-  res.render("blogs/view", { viewItem: blog, user: runningUser });
+const noteView = async (req, res) => {
+  try {
+    const runningUser = req.session.user;
+    const note = await blogModel.findById(req.params.id);
+
+    if (!note) return res.status(404).json({ error: "Note not found" });
+
+    res.json({
+      note: note,
+      user: runningUser,
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
 };
+
 
 const blogOnlyView = async (req, res) => {
   let blog = await blogModel.findById(req.params.id);
@@ -86,13 +98,14 @@ const deleteBTN = async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 
-  res.redirect("/mainInterface");
+res.status(200).json({ message: "Note deleted successfully" });
+
 };
 
 module.exports = {
   blogsCreate,
   blogsSave,
-  blogView,
+  noteView,
   blogOnlyView,
   backBTN,
   editPage,
