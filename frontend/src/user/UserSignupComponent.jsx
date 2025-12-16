@@ -33,9 +33,9 @@ function UserSignupComponent() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="bg-white shadow-md rounded-lg p-6 w-96">
+      <div className="bg-white shadow-md rounded-lg p-6 w-md">
         <h2 className="text-black mb-8 font-bold text-3xl text-center">
-          Sign Up
+          Sign Up 🔑
         </h2>
 
         <form onSubmit={handleSubmit}>
@@ -79,13 +79,15 @@ function UserSignupComponent() {
           />
 
           {error && <p className="text-red-600 mb-3">{error}</p>}
-
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-          >
-            Sign Up
-          </button>
+          <div className="flex gap-20">
+            <button
+              type="submit"
+              className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+            >
+              Sign Up
+            </button>
+            <button className="bg-red-600 text-white w-full rounded hover:bg-red-700" onClick={ () => navigate("/")}>Cancel</button>
+          </div>
         </form>
       </div>
     </div>

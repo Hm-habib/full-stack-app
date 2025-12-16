@@ -47,7 +47,7 @@ function UserLoginComponent() {
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white shadow-md rounded-lg p-6 w-96 ">
         <h2 className="text-black mb-8 font-bold text-3xl text-center">
-          Login
+          Login 🔐
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

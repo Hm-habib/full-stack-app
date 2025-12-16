@@ -10,10 +10,9 @@ function ViewNote() {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3000/note/${id}/view`,
-          { withCredentials: true }
-        );
+        const res = await axios.get(`http://localhost:3000/note/${id}/view`, {
+          withCredentials: true,
+        });
         setNote(res.data.note);
       } catch (err) {
         console.error("Error loading note:", err);
@@ -21,20 +20,57 @@ function ViewNote() {
     };
     fetchNote();
   }, [id]);
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3000/user-logout",
+        {},
+        { withCredentials: true }
+      );
+      navigate("/");
+    } catch (err) {
+      console.log("Logout failed:", err);
+    }
+  };
 
-  if (!note) return <h2>Loading...</h2>;
+  if (!note) return <h2 className="text-center mt-10">Loading...</h2>;
 
   return (
-    <div className="max-w-xl mx-auto font-normal text-lg text-start p-6 bg-white rounded-lg shadow">
-      <h1 className="text-2xl font-bold mb-4">{note.title}</h1>
-      <p className="text-gray-600 text-justify">{note.body}</p>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="max-w-xl p-6 bg-white rounded-lg shadow">
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+          >
+            Logout
+          </button>
+        </div>
+        <h1 className="text-2xl text-start font-bold mb-4 text-black">
+          {" "}
+          Title: {note.title}
+        </h1>
 
-      <button
-        onClick={() => navigate("/dashboard")}
-        className="mt-4  py-2 w-132 bg-blue-600 text-white rounded"
-      >
-        Back to Dashboard
-      </button>
+        <p className="text-gray-600 font-bold text-justify">
+          Description: {note.body}
+        </p>
+
+        <div className="mt-6 flex justify-between gap-30">
+          <button
+            onClick={() => navigate(`/edit-note/${id}`)}
+            className="py-2 w-sm bg-yellow-600 text-white rounded hover:bg-yellow-700"
+          >
+            Edit Note
+          </button>
+
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="py-2 w-sm  bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
