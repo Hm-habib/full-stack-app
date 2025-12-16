@@ -58,14 +58,35 @@ const editPage = async (req, res) => {
 };
 
 const saveEditToView = async (req, res) => {
-  let blog = await blogModel.findById(req.params.id);
-  blog.title = req.body.title;
-  blog.body = req.body.body;
-  blog.done = false;
+  try {
+    const { title, body } = req.body;
+    const noteId = req.params.id;
 
-  await blog.save();
-  res.redirect(`/blog/${req.params.id}/view`);
+    // Find blog
+    const note = await blogModel.findById(noteId);
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    // Update fields
+    note.title = title;
+    note.body = body;
+    note.done = false;
+
+    await note.save();
+
+    // Send success for frontend
+    res.status(200).json({
+      message: "Blog updated successfully",
+      note: note,
+    });
+
+  } catch (err) {
+    console.error("Edit error:", err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
 };
+
 
 const markDone = async (req, res) => {
   let blog = await blogModel.findByIdAndUpdate(req.params.id);

@@ -22,7 +22,7 @@ router.get("/blog/:id/back",isAuthenticated, blogController.backBTN);
 router.get("/blog/:id/edit",isAuthenticated, blogController.editPage);
 
 // save edit btn to view page
-router.post("/blog/:id/save-edit",isAuthenticated, blogController.saveEditToView);
+router.post("/note/:id/save-edit",isAuthenticated, blogController.saveEditToView);
 
 // edit cancel btn to view page
 router.get("/blog/:id/edit/cancel",  isAuthenticated,(req, res) => {

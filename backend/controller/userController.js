@@ -27,7 +27,11 @@ const mainInterface = async (req, res) => {
 
     let notes = [];
     notes = await blogModel.find({ userId: runningUser._id });
-    res.json(notes);
+    const user = req.session.user
+    res.json({
+      user, notes
+    });
+   
   } catch (err) {
     console.error("Error in mainInterface:", err.message);
     res.status(500).send("Something went wrong!");

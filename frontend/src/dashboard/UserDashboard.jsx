@@ -5,6 +5,7 @@ import CreateNote from "../component/createNote/createNote";
 
 function UserDashboard() {
   const [notes, setNotes] = useState([]);
+  const [user, setUser] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
   const navigate = useNavigate();
@@ -14,7 +15,8 @@ function UserDashboard() {
       const res = await axios.get("http://localhost:3000/user-dashboard", {
         withCredentials: true,
       });
-      setNotes(res.data);
+      setNotes(res.data.notes);
+      setUser(res.data.user);
     } catch (err) {
       console.error("Failed to fetch notes:", err);
     }
@@ -50,54 +52,84 @@ function UserDashboard() {
     fetchNotes();
   }, []);
 
-  return (
-    <>
-      <div className="p-6">
-        <div className="flex justify-end mb-6">
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Logout
-          </button>
-        </div>
+ return (
+  <>
+    <div className="p-6">
+      {/* Header */}
+      <div className="flex justify-between  sm:flex-row  sm:items-center mb-6 gap-4">
+        <h3 className="text-lg font-semibold text-center sm:text-left">
+          Welcome: {user?.username}
+        </h3>
 
-        {!showCreate && (
-          <>
-            <h2 className="text-3xl font-bold mb-6 text-black">Your Notes</h2>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700  sm:w-auto"
+        >
+          Logout
+        </button>
+      </div>
 
-            <table className="w-full border-collapse shadow-md">
+      {!showCreate && (
+        <>
+          <h2 className="text-3xl font-bold mb-6 text-black">
+            Your Notes 📘
+          </h2>
+
+          {/* Table Wrapper */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse shadow-md">
               <thead>
-                <tr className="bg-gray-200 text-black">
-                  <th className="p-3 border w-70">Title</th>
-                  <th className="p-3 border">Body</th>
-                  <th className="p-3 border text-center w-40">Actions</th>
+                <tr className="bg-gray-200 text-black text-sm">
+                  <th className="p-3 border">#</th>
+
+                  <th className="p-3 border">
+                    Updated
+                  </th>
+
+                  <th className="p-3 border">Title</th>
+
+                  <th className="p-3 border">
+                    Body
+                  </th>
+
+                  <th className="p-3 border text-center">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
               <tbody>
-                {notes.map((note) => (
+                {notes.map((note, i) => (
                   <tr
                     key={note._id}
-                    className="hover:bg-gray-100 transition text-black"
+                    className="hover:bg-gray-100 transition text-black text-sm"
                   >
-                    <td className="p-3 text-start border w-70">{note.title}</td>
-                    <td className="p-3 border text-start">
+                    <td className="p-3 border font-bold">{i + 1}</td>
+
+                    <td className="p-3 border">
+                      {note.updatedAt}
+                    </td>
+
+                    <td className="p-3 border font-medium">
+                      {note.title}
+                    </td>
+
+                    <td className="p-3 border">
                       {note.body.slice(0, 60)}...
                     </td>
 
-                    <td className="p-3 border text-center">
-                      <div className="flex justify-center gap-2">
+                    <td className="p-3 border">
+                      <div className="flex flex-col sm:flex-row gap-2 justify-center">
                         <button
                           onClick={() => navigate(`/note/${note._id}/view`)}
-                          className="bg-blue-500 text-white px-3 py-1 rounded"
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
                         >
                           View
                         </button>
 
                         <button
                           onClick={() => deleteNote(note._id)}
-                          className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                          className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm"
                         >
                           Delete
                         </button>
@@ -107,34 +139,34 @@ function UserDashboard() {
                 ))}
               </tbody>
             </table>
-          </>
-        )}
+          </div>
+        </>
+      )}
 
-        {!showCreate && (
-          <button
-            onClick={() => setShowCreate(true)}
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded my-6 block mx-auto"
-          >
-            Create a Note
-          </button>
-        )}
+      {!showCreate && (
+        <button
+          onClick={() => setShowCreate(true)}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded my-6 block mx-auto w-full sm:w-auto"
+        >
+          Create a Note
+        </button>
+      )}
 
-        {selectedNote && (
-          <ViewNoteModal
-            note={selectedNote}
-            onClose={() => setSelectedNote(null)}
-          />
-        )}
-      </div>
-
-      {showCreate && (
-        <CreateNote
-          onNoteCreated={fetchNotes}
-          onClose={() => setShowCreate(false)}
+      {selectedNote && (
+        <ViewNoteModal
+          note={selectedNote}
+          onClose={() => setSelectedNote(null)}
         />
       )}
-    </>
-  );
-}
+    </div>
+
+    {showCreate && (
+      <CreateNote
+        onNoteCreated={fetchNotes}
+        onClose={() => setShowCreate(false)}
+      />
+    )}
+  </>
+);}
 
 export default UserDashboard;
